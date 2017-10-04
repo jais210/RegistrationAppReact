@@ -28,7 +28,7 @@ class Model {
 
 const Header = () => {
   return(
-  <div className="header">
+  <header>
         <h1>RSVP</h1>
         <p> Registration App </p>
         <form id="registrar">
@@ -39,10 +39,9 @@ const Header = () => {
           <h2>Invitees</h2>
           <ul id="invitedList" />
       </div>
-  </div>
+  </header>
   );
 } 
-
 
 ReactDOM.render(<Header/>, document.getElementById('container'));
 
