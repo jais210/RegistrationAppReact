@@ -1,9 +1,9 @@
-const form = document.getElementById('registrar');
-const input = form.querySelector('input');
-const ul = document.getElementById('invitedList');
+const form = document.getElementById('registrar');// etiqueta Form
+const input = form.querySelector('input');// input
+const ul = document.getElementById('invitedList');//etiqueta ul
 
 function createLI(text) {
-  const li = document.createElement('li');
+  const li = document.createElement('li');// se crea li
   li.textContent = text;
   const label = document.createElement('label');
   label.textContent = 'Confirmed';
@@ -16,7 +16,7 @@ function createLI(text) {
   li.appendChild(button);
   return li;
 }
-
+// dinamicidad
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const text = input.value;
