@@ -1,7 +1,7 @@
 // MODEL
 class Model {
   constructor(){
-    this.invities= []; // player contiene a mi array de objetos y será instanciado con New 
+    this.invities= [];  
     this.inputValue = null;
   }
   
@@ -20,11 +20,23 @@ class Model {
    text.value= '';
    this.notify();
   } 
-
 }
 
 //VISTA
 // primero maquetar
+
+
+const ShowInvities = ()=>{
+  return model.invities.map((invitie)=>{
+	return (
+		<div className="player">
+			<div className="player-name">
+				<center><strong>{invitie.input}</strong></center> 
+			</div>
+		</div>
+	);
+  });
+}
 
 const Header = () => {
   return(
@@ -33,7 +45,7 @@ const Header = () => {
         <p> Registration App </p>
         <form id="registrar">
           <input type="text" name="name" placeholder="Invite Someone" />
-          <button type="submit" name="submit" value="submit">Submit</button>
+          <button type="submit" name="submit" value="submit" onClick={() => model.addInvities(invities)}>Submit</button>
         </form>
         <div className="main">
           <h2>Invitees</h2>
