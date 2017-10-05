@@ -3,6 +3,7 @@ class Model {
   constructor(){
     this.invities= [];  
     this.inputValue = null;
+    this.check= null;
   }
   
   notify(render) { // cada vez que se añada un nuevo elemento se actualiza el DOM virtual
@@ -14,38 +15,51 @@ class Model {
   }
 
   addInvities(text){
+    if(text!=''){
       this.invities.push({
-      input: text.value,
+      input: text,
+      confirmed: false,
+      id: Utils.uuid()
     });
-   text.value= '';
+  }
+      
+   this.inputValue.value= '';
    this.notify();
   } 
+
+  removeInvities(text) {
+    this.invities = this.invities.filter(inv => inv!= text);
+    this.notify();
+  }
+  isChecked(ivte, input) {
+    ivte.confirmed = input.checked;
+    this.notify();
+  }
+ 
 }
 
 //VISTA
 // primero maquetar
+const Li = () => {
+  return (
+    <li>
 
-
-const ShowInvities = ()=>{
-  return model.invities.map((invitie)=>{
-	return (
-		<div className="player">
-			<div className="player-name">
-				<center><strong>{invitie.input}</strong></center> 
-			</div>
-		</div>
-	);
-  });
+      <label>Confirmed<input type="checkbox"/></label>
+      <button>remove</button>
+    </li>
+  );
 }
 
-const Header = () => {
+
+
+const Header = (props) => {
   return(
   <header>
         <h1>RSVP</h1>
         <p> Registration App </p>
         <form id="registrar">
           <input type="text" name="name" placeholder="Invite Someone" />
-          <button type="submit" name="submit" value="submit" onClick={() => model.addInvities(invities)}>Submit</button>
+          <button type="submit" name="submit" value="submit" onClick={() => props.addInvities(invities)}>Submit</button>
         </form>
         <div className="main">
           <h2>Invitees</h2>
@@ -58,61 +72,3 @@ const Header = () => {
 ReactDOM.render(<Header/>, document.getElementById('container'));
 
 
-
-
-// const form = document.getElementById('registrar');
-// const input = form.querySelector('input');
-// const ul = document.getElementById('invitedList');
-
-// function createLI(text) {
-//   const li = document.createElement('li');
-//   li.textContent = text;
-//   const label = document.createElement('label');
-//   label.textContent = 'Confirmed';
-//   const checkbox = document.createElement('input');
-//   checkbox.type = 'checkbox';
-//   label.appendChild(checkbox);
-//   li.appendChild(label);  
-//   const button = document.createElement('button');
-//   button.textContent = 'remove';
-//   li.appendChild(button);
-//   return li;
-// }
-
-// form.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   const text = input.value;
-//   input.value = '';
-//   const li = createLI(text);
-//   ul.appendChild(li);
-// });
-  
-// ul.addEventListener('change', (e) => {
-//   const checkbox = event.target;
-//   const checked = checkbox.checked;
-//   const listItem = checkbox.parentNode.parentNode;
-  
-//   if (checked) {
-//     listItem.className = 'responded';
-//   } else {
-//     listItem.className = '';
-//   }
-// });
-  
-// ul.addEventListener('click', (e) => {
-//   if (e.target.tagName === 'BUTTON') {
-//     const li = e.target.parentNode;
-//     const ul = li.parentNode;
-//     ul.removeChild(li);
-//   }
-// });  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
