@@ -52,7 +52,7 @@ const Li = () => {
 
 
 
-const Header = (props) => {
+const Header = () => {
   return(
   <header>
         <h1>RSVP</h1>
