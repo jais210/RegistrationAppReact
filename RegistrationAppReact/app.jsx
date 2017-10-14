@@ -40,35 +40,49 @@ class Model {
 
 //VISTA
 // primero maquetar
-const Li = () => {
+const Header = ()=>{
+  return(
+    <header>
+          <h1>RSVP</h1>
+          <p> Registration App </p>
+          <form id="registrar" onSubmit={e=>{e.preventDefault();
+            model.addInvities(model.input.value)}}>
+            <input type="text" name="name" placeholder="Invite Someone" onChange={e=>(model.input=e.target)}/>
+            <button type="submit" name="submit" value="submit" onClick={() => props.addInvities(invities)}>Submit</button>
+          </form>
+          <div className="main">
+            <h2>Invitees</h2>
+            <ul id="invitedList">{model.invities.map(item=><List key={item.id} model={model}/>)}
+            </ul>
+          </div>
+    </header>
+    );
+}
+const List = ({invitie, model}) => {
   return (
-    <li>
-
-      <label>Confirmed<input type="checkbox"/></label>
-      <button>remove</button>
+    <li className = {invitie.confirmed? 'responded':''}>
+        {invite.name}
+      <label>Confirmed<input type="checkbox" onChange={(e)=>model.isChecked(invitie, e.target)} checked={invitie.confirmed}/></label>
+      <button onClick = {()=> model.removeInvitie(invitie)}>remove</button>
     </li>
   );
 }
 
 
 
-const Header = () => {
+const App = () => {
   return(
-  <header>
-        <h1>RSVP</h1>
-        <p> Registration App </p>
-        <form id="registrar">
-          <input type="text" name="name" placeholder="Invite Someone" />
-          <button type="submit" name="submit" value="submit" onClick={() => props.addInvities(invities)}>Submit</button>
-        </form>
-        <div className="main">
-          <h2>Invitees</h2>
-          <ul id="invitedList" />
-      </div>
-  </header>
+  <div className = "wrapper">
+      <Header/>
+      <h2>Invities</h2>
+      <ul id="invitedList">
+        // falta Aquí
+      </ul>  
+  </div>
+
   );
 } 
 
-ReactDOM.render(<Header/>, document.getElementById('container'));
+ReactDOM.render(<App/>, document.getElementById('container'));
 
 
