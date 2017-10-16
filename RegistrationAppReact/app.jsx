@@ -1,74 +1,84 @@
 // MODEL
 class Model {
-  constructor(){
-    this.invities= [];  
-    this.inputValue = null;
-    this.check= null;
+  constructor() {
+    this.invitees = [];
+    this.input = null;
+    this.check = null;
   }
-  
-  notify(render) { // cada vez que se añada un nuevo elemento se actualiza el DOM virtual
-    this.render();    
-  }  
-
-  subscribe(render){
+  addInvite(text) {
+    if(text!=''){
+      this.invitees.push({
+        name: text,
+        confirmed: false,
+        id: Utils.uuid()
+      });
+    }
+    this.input.value = '';
+    this.notify();
+  }
+  removeInvite(text) {
+    this.invitees = this.invitees.filter(item => item != text);
+    this.notify();
+  }
+  isChecked(invite, input) {
+    invite.confirmed = input.checked;
+    this.notify();
+  }
+  subscribe(render) {
     this.render = render;
   }
-
-  addInvities(text){
-    if(text!=''){
-      this.invities.push({
-      input: text,
-      confirmed: false,
-      id: Utils.uuid()
-    });
+  notify() {
+    this.render();
   }
-      
-   this.inputValue.value= '';
-   this.notify();
-  } 
-
-  removeInvities(text) {
-    this.invities = this.invities.filter(inv => inv!= text);
-    this.notify();
-  }
-  isChecked(ivte, input) {
-    ivte.confirmed = input.checked;
-    this.notify();
-  }
- 
 }
-
-//VISTA
-// primero maquetar
-const Li = () => {
+const Header = ({model})=>{
+  return(
+  <header>
+  <h1>RSVP</h1>
+  <p> Registration App </p>
+  <form id="registrar"
+    onSubmit={e => {
+      e.preventDefault();
+      model.addInvite(model.input.value);
+    }}
+  >
+    <input type="text" name="name" placeholder="Invite Someone" onChange={e => (model.input = e.target)} />
+    <button type="submit" name="submit" value="submit">Submit</button>
+  </form>
+</header>)
+}
+const List = ({ invite, model }) => {
   return (
-    <li>
-
-      <label>Confirmed<input type="checkbox"/></label>
-      <button>remove</button>
+    <li className={invite.confirmed ? 'responded' : ''}>
+      {invite.name}
+      <label>Confirmed<input type="checkbox" onChange={(e) => model.isChecked(invite, e.target)} checked={invite.confirmed} /></label>
+      <button onClick={() => model.removeInvite(invite)}>remove</button>
     </li>
   );
 }
 
-
-
-const Header = () => {
-  return(
-  <header>
-        <h1>RSVP</h1>
-        <p> Registration App </p>
-        <form id="registrar">
-          <input type="text" name="name" placeholder="Invite Someone" />
-          <button type="submit" name="submit" value="submit" onClick={() => props.addInvities(invities)}>Submit</button>
-        </form>
-        <div className="main">
-          <h2>Invitees</h2>
-          <ul id="invitedList" />
+const Application = ({ model }) => {
+  return (
+    <div className="wrapper">
+      <Header model = {model}/>
+      <div className="main">
+        <h2>Invitees</h2>
+        <ul id="invitedList">
+          {model.invitees.map(item => <List key={item.id} invite={item} model={model} />)}
+        </ul>
       </div>
-  </header>
+    </div>
   );
-} 
-
-ReactDOM.render(<Header/>, document.getElementById('container'));
+}
 
 
+let model = new Model();
+let render = () => {
+  ReactDOM.render(
+    <Application model={model} />,
+    document.getElementById('container')
+  );
+};
+
+model.subscribe(render);
+render(); 
